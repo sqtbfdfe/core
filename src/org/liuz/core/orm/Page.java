@@ -1,173 +1,151 @@
- package org.liuz.core.orm;
+package org.liuz.core.orm;
 
- import java.util.Collections;
- import java.util.List;
- import org.apache.commons.lang.StringUtils;
+import java.util.Collections;
+import java.util.List;
 
- public class Page<T>
- {
-   public static final String ASC = "asc";
-   public static final String DESC = "desc";
-   protected int pageNo = 1;
-   protected int pageSize = 10;
-   protected String orderBy = null;
-   protected String order = null;
-   protected boolean autoCount = true;
+import org.apache.commons.lang.StringUtils;
 
-   protected List<T> result = Collections.emptyList();
-   protected long totalCount = -1L;
+public class Page<T> {
+    public static final String ASC = "asc";
+    public static final String DESC = "desc";
+    protected int pageNo = 1;
+    protected int pageSize = 10;
+    protected String orderBy = null;
+    protected String order = null;
+    protected boolean autoCount = true;
 
-   public Page()
-   {
-   }
+    protected List<T> result = Collections.emptyList();
+    protected long totalCount = -1L;
 
-   public Page(int pageSize)
-   {
-     setPageSize(pageSize);
-   }
+    public Page() {
+    }
 
-   public Page(int pageSize, boolean autoCount) {
-     setPageSize(pageSize);
-     setAutoCount(autoCount);
-   }
+    public Page(int pageSize) {
+        setPageSize(pageSize);
+    }
 
-   public int getPageNo()
-   {
-     return this.pageNo;
-   }
+    public Page(int pageSize, boolean autoCount) {
+        setPageSize(pageSize);
+        setAutoCount(autoCount);
+    }
 
-   public void setPageNo(int pageNo)
-   {
-     this.pageNo = pageNo;
+    public int getPageNo() {
+        return this.pageNo;
+    }
 
-     if (pageNo < 1)
-       this.pageNo = 1;
-   }
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
 
-   public int getPageSize()
-   {
-     return this.pageSize;
-   }
+        if (pageNo < 1)
+            this.pageNo = 1;
+    }
 
-   public void setPageSize(int pageSize)
-   {
-     this.pageSize = pageSize;
+    public int getPageSize() {
+        return this.pageSize;
+    }
 
-     if (pageSize < 1)
-       this.pageSize = 1;
-   }
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
 
-   public int getFirst()
-   {
-     return (this.pageNo - 1) * this.pageSize;
-   }
+        if (pageSize < 1)
+            this.pageSize = 1;
+    }
 
-   public String getOrderBy()
-   {
-     return this.orderBy;
-   }
+    public int getFirst() {
+        return (this.pageNo - 1) * this.pageSize;
+    }
 
-   public void setOrderBy(String orderBy)
-   {
-     this.orderBy = orderBy;
-   }
+    public String getOrderBy() {
+        return this.orderBy;
+    }
 
-   public boolean isOrderBySetted()
-   {
-     return (StringUtils.isNotBlank(this.orderBy)) && (StringUtils.isNotBlank(this.order));
-   }
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
 
-   public String getOrder()
-   {
-     return this.order;
-   }
+    public boolean isOrderBySetted() {
+        return (StringUtils.isNotBlank(this.orderBy)) && (StringUtils.isNotBlank(this.order));
+    }
 
-   public void setOrder(String order)
-   {
-     String[] orders = StringUtils.split(StringUtils.lowerCase(order), ',');
-     for (String orderStr : orders) {
-       if ((!StringUtils.equals("desc", orderStr)) && (!StringUtils.equals("asc", orderStr))) {
-         throw new IllegalArgumentException("排序方向" + orderStr + "不是合法值");
-       }
-     }
-     this.order = StringUtils.lowerCase(order);
-   }
+    public String getOrder() {
+        return this.order;
+    }
 
-   public boolean isAutoCount()
-   {
-     return this.autoCount;
-   }
+    public void setOrder(String order) {
+        String[] orders = StringUtils.split(StringUtils.lowerCase(order), ',');
+        for (String orderStr : orders) {
+            if ((!StringUtils.equals("desc", orderStr)) && (!StringUtils.equals("asc", orderStr))) {
+                throw new IllegalArgumentException("排序方向" + orderStr + "不是合法");
+            }
+        }
+        this.order = StringUtils.lowerCase(order);
+    }
 
-   public void setAutoCount(boolean autoCount)
-   {
-     this.autoCount = autoCount;
-   }
+    public boolean isAutoCount() {
+        return this.autoCount;
+    }
 
-   public List<T> getResult()
-   {
-     return this.result;
-   }
+    public void setAutoCount(boolean autoCount) {
+        this.autoCount = autoCount;
+    }
 
-   public void setResult(List<T> result) {
-     this.result = result;
-   }
+    public List<T> getResult() {
+        return this.result;
+    }
 
-   public long getTotalCount()
-   {
-     return this.totalCount;
-   }
+    public void setResult(List<T> result) {
+        this.result = result;
+    }
 
-   public void setTotalCount(long totalCount) {
-     this.totalCount = totalCount;
-   }
+    public long getTotalCount() {
+        return this.totalCount;
+    }
 
-   public long getTotalPages()
-   {
-     if (this.totalCount < 0L) {
-       return -1L;
-     }
-     long count = this.totalCount / this.pageSize;
-     if (this.totalCount % this.pageSize > 0L) {
-       count += 1L;
-     }
-     return count;
-   }
+    public void setTotalCount(long totalCount) {
+        this.totalCount = totalCount;
+    }
 
-   public boolean isHasNext()
-   {
-     return this.pageNo + 1 <= getTotalPages();
-   }
+    public long getTotalPages() {
+        if (this.totalCount < 0L) {
+            return -1L;
+        }
+        long count = this.totalCount / this.pageSize;
+        if (this.totalCount % this.pageSize > 0L) {
+            count += 1L;
+        }
+        return count;
+    }
 
-   public int getNextPage()
-   {
-     if (isHasNext()) {
-       return this.pageNo + 1;
-     }
-     return this.pageNo;
-   }
+    public boolean isHasNext() {
+        return this.pageNo + 1 <= getTotalPages();
+    }
 
-   public boolean isHasPre()
-   {
-     return this.pageNo - 1 >= 1;
-   }
+    public int getNextPage() {
+        if (isHasNext()) {
+            return this.pageNo + 1;
+        }
+        return this.pageNo;
+    }
 
-   public int getPrePage()
-   {
-     if (isHasPre()) {
-       return this.pageNo - 1;
-     }
-     return this.pageNo;
-   }
+    public boolean isHasPre() {
+        return this.pageNo - 1 >= 1;
+    }
 
-   public String toJson()
-   {
-     StringBuffer strBuffer = new StringBuffer("page:");
-     strBuffer.append("{pageNo:\"").append(getPageNo());
-     strBuffer.append("\",totalCount:\"").append(getTotalCount());
-     strBuffer.append("\",totalPages:\"").append(getTotalPages());
-     strBuffer.append("\",prePage:\"").append(getPrePage());
-     strBuffer.append("\",nextPage:\"").append(getNextPage());
-     strBuffer.append("\"}");
-     return strBuffer.toString();
-   }
- }
+    public int getPrePage() {
+        if (isHasPre()) {
+            return this.pageNo - 1;
+        }
+        return this.pageNo;
+    }
+
+    public String toJson() {
+        StringBuffer strBuffer = new StringBuffer("page:");
+        strBuffer.append("{pageNo:\"").append(getPageNo());
+        strBuffer.append("\",totalCount:\"").append(getTotalCount());
+        strBuffer.append("\",totalPages:\"").append(getTotalPages());
+        strBuffer.append("\",prePage:\"").append(getPrePage());
+        strBuffer.append("\",nextPage:\"").append(getNextPage());
+        strBuffer.append("\"}");
+        return strBuffer.toString();
+    }
+}
